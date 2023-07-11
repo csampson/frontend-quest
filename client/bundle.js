@@ -10,9 +10,7 @@ const images = {
   sword,
 };
 
-const WEBSOCKET_HOST = process.env.NODE_ENV === 'development'
-  ? '10.0.0.23:3000'
-  : '';
+const WEBSOCKET_HOST = 'frontend-quest-e812fb3c06c4.herokuapp.com';
 
 const socket = new WebSocket(`ws://${WEBSOCKET_HOST}`);
 
