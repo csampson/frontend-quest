@@ -3,8 +3,7 @@
   "scripts": {
     "start": "npm run start:server",
     "start:server": "node ./server/index.js",
-    "start:client": "parcel",
-    "build": "parcel build"
+    "start:client": "parcel"
   },
   "source": "client/index.html",
   "engines": {
