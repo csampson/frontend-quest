@@ -26,18 +26,20 @@ wss.on('connection', (ws) => {
       case 'PLAYER_ATTACK':
         game.damageMonster(data.damage);
 
-        if (game.monster.hitpoints > 0) {
-          sendMessage({
-            type: 'MONSTER_STATE',
-            payload: { monster: game.monster.attributes }
-          });
-        } else {
-          game.spawnMonster();
+        sendMessage({
+          type: 'MONSTER_STATE',
+          payload: { monster: game.monster.attributes }
+        });
 
-          sendMessage({
-            type: 'MONSTER_RESPAWN',
-            payload: { monster: game.monster.attributes }
-          });
+        if (game.monster.hitpoints <= 0) {
+          setTimeout(() => {
+            game.spawnMonster();
+
+            sendMessage({
+              type: 'MONSTER_RESPAWN',
+              payload: { monster: game.monster.attributes }
+            });
+          }, 1000);
         }
     }
   });
@@ -47,3 +49,12 @@ wss.on('connection', (ws) => {
     payload: { monster: game.monster.attributes }
   }));
 });
+
+setInterval(() => {
+  sendMessage({
+    type: 'MONSTER_ATTACK',
+    payload: {
+      damage: 10
+    }
+  });
+}, 5000);

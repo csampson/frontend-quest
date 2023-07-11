@@ -16,28 +16,31 @@ const WEBSOCKET_HOST = process.env.NODE_ENV === 'development'
 
 const socket = new WebSocket(`ws://${WEBSOCKET_HOST}`);
 
-const Player = ({ name , hitpoints}) => {
+const Monster = ({attributes , isAttacking }) => {
+  const { name, hitpoints } = attributes;
+  let state = null;
+
+  if (isAttacking) {
+    state = 'attacking';
+  }
+
   return (
-    <div className='player'>
-      <img src='https://units.wesnoth.org/1.12/pics/core%24images%24units%24human-loyalists%24swordsman.png' />
-      <div className='player-name'>{name}</div>
-      <div className='hitpoints'>
-        <span className='hitpoints-fill' style={{ width: `${10 * hitpoints}%` }}></span>
-      </div>
+    <div className='monster-container'>
+      <figure className='monster' data-hitpoints={hitpoints} data-state={state}>
+        <img src={images[name]} alt='' />
+        <span className='monster-name'>{name}</span>
+        <div className='hitpoints'>
+          <span className='hitpoints-fill' style={{ width: `${hitpoints || 0}%` }}></span>
+        </div>
+      </figure>
     </div>
   );
-};
+}
 
 const App = () => {
   const [monster, setMonster] = useState({});
-  const players = [
-    { name: 'Cam', hitpoints: 5 },
-    { name: 'Adrian', hitpoints: 2 },
-    { name: 'Adrian', hitpoints: 2 },
-    { name: 'Adrian', hitpoints: 2 },
-    { name: 'Adrian', hitpoints: 2 },
-    { name: 'Adrian', hitpoints: 2 }
-  ];
+  const [monsterAttacking, setMonsterAttacking] = useState(false);
+  const [hitpoints, setHitpoints] = useState(100);
 
   const attack = () => {
     socket.send(JSON.stringify({
@@ -46,6 +49,10 @@ const App = () => {
         damage: 10
       }
     }));
+  };
+
+  const restartGame = () => {
+    setHitpoints(100);
   };
 
   useEffect(() => {
@@ -59,29 +66,39 @@ const App = () => {
       if (data.type === 'MONSTER_STATE' || data.type === 'MONSTER_RESPAWN') {
         setMonster(data.payload.monster);
       }
+
+      if (data.type === 'MONSTER_ATTACK') {
+        setHitpoints(hitpoints - data.payload.damage);
+        setMonsterAttacking(true);
+
+        setTimeout(() => {
+          setMonsterAttacking(false);
+        }, 1500);
+      }
     });
   });
+
+  if (hitpoints <= 0) {
+    return (
+      <div className='game-over'>
+        <div>
+          <h1>You Died</h1>
+
+          <button className='game-over-restart' type='button' onClick={restartGame}>
+            Rise from your Grave!
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <React.Fragment>
       <div className='scene'>
-        <div className='monster-container'>
-          <figure className='monster'>
-            <img src={images[monster.name]} alt='' />
-            <div className='hitpoints'>
-            <span className='hitpoints-fill' style={{ width: `${monster.hitpoints}%` }}></span>
-          </div>
-          </figure>
-        </div>
-        
-        <div className='player-container'>
-          {players.map(player => (
-            <Player key={player.id} {...player} />
-          ))}
-        </div>
+        <Monster attributes={monster} isAttacking={monsterAttacking} />
       </div>
 
-      <div className='status'>
+      <div className='menu-container'>
         <menu className='menu'>
           <ul>
             <li>
@@ -92,6 +109,10 @@ const App = () => {
             </li>
           </ul>
         </menu>
+
+        <footer className='status'>
+          Hitpoints: {hitpoints}/100
+        </footer>
       </div>
     </React.Fragment>
   );

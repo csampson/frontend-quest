@@ -17,10 +17,13 @@ figure {
   margin: 0
 }
 
-ul, li {
+ul {
   list-style: none;
-  margin: 0;
+}
+
+ul, li, menu {
   padding: 0;
+  margin: 0;
 }
 
 .scene {
@@ -29,55 +32,48 @@ ul, li {
   justify-content: center;
 }
 
-.monster-container, .players {
-  display: flex;
-  align-items: center;
-}
-
-.player-container {
-  align-items: end;
-  align-self: center;
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr 1fr;
-}
-
-.player:nth-child(5) {
-  margin-left: 2rem;
-}
-
-.player img {
-  transform: rotateY(180deg);
-  height: 175px;
-}
-
 .monster-container {
+  align-items: center;
   justify-content: flex-end;
   align-items: center;
+  font-size: large;
   display: flex;
+}
+
+.monster-name {
+  font-size: 2em;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: block;
 }
 
 .monster img {
-  height: 500px;
-  margin-bottom: -100px;
+  animation: float 3s ease-in-out infinite;
+  height: 600px;
+  margin-bottom: -50px;
 }
 
-.player {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+.monster[data-state='attacking'] img {
+  animation: attack 500ms ease-in;
 }
 
-.player-name {
-  text-align: center;
-  margin: -1rem 0 1ex;
+.monster[data-hitpoints^='0'] img,
+.monster[data-hitpoints^='-'] img {
+  animation: death 500ms ease-out forwards;
+}
+
+@media (max-width: 760px) {
+  .monster img {
+    height: 300px;
+  }
 }
 
 .hitpoints {
   border-radius: 3px;
   border: 2px solid gainsboro;
   background: linear-gradient(#333, #111);
-  width: 8rem;
+  width: 8em;
   margin: 0 auto;
   display: flex;
 }
@@ -85,22 +81,27 @@ ul, li {
 .hitpoints-fill {
   border: 1px solid #333;
   background: linear-gradient(red, firebrick);
-  height: 8px;
+  height: 1em;
   margin: 2px;
   display: block;
 }
 
-.status {
-  padding: 4rem;
+.menu-container {
+  width: 100%;
   position: fixed;
-  left: 1ex;
-  right: 1ex;
+  left: 0;
   bottom: 0;
 }
 
 .menu {
   justify-content: center;
   display: flex;
+}
+
+@media (max-height: 680px) {
+  .menu {
+    justify-content: start;
+  }
 }
 
 .menu-action {
@@ -111,13 +112,96 @@ ul, li {
   color: currentColor;
   font: inherit;
   font-size: x-large;
-  width: 15vh;
+  min-width: 100px;
+  width: 12vh;
   min-height: 100px;
-  height: 15vh;
+  height: 12vh;
   padding: 1rem;
   position: relative;
 }
 
 .menu-action img {
   height: 96px;
+}
+
+@media (max-width: 680px) {
+  .menu-action img {
+    height: 48px;
+  }
+}
+
+.status {
+  background: rgba(0,0,0,0.75);
+  text-align: center;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.game-over {
+  background-color: #1e1e1e;
+  font-size: xx-large;
+  text-align: center;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.game-over-restart {
+  border-radius: 3px;
+  border: 3px solid gainsboro;
+  background: firebrick;
+  color: white;
+  font: inherit;
+  font-size: 1em;
+  width: 100%;
+  padding: 1ex;
+  margin-top: 2rem;
+}
+
+@keyframes float {
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-20px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@keyframes attack {
+  0% {
+    transform: translateX(0), scale(1);
+  }
+
+  25% {
+    transform: translateX(20px);
+  }
+
+  35% {
+    transform: scale(1.25);
+  }
+
+  100% {
+    transform: translateX(0), scale(1);
+  }
+}
+
+@keyframes death {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
