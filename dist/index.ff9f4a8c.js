@@ -2958,7 +2958,7 @@ const images = {
     sword: (0, _swordPngDefault.default)
 };
 const WEBSOCKET_HOST = "frontend-quest-e812fb3c06c4.herokuapp.com";
-const socket = new WebSocket(`ws://${WEBSOCKET_HOST}`);
+const socket = new WebSocket(`wss://${WEBSOCKET_HOST}`);
 const Monster = ({ attributes, isAttacking })=>{
     const { name, hitpoints } = attributes;
     let state = null;
