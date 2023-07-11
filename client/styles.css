@@ -1,3 +1,123 @@
 html, body {
   margin: 0;
 }
+
+body {
+  background: black url('images/background.webp') no-repeat;
+  background-size: cover;
+  font-family: 'Press Start 2P', cursive;
+  color: white;
+}
+
+main {
+  height: 100vh;
+}
+
+figure {
+  margin: 0
+}
+
+ul, li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.scene {
+  padding: 20vh 2rem 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.monster-container, .players {
+  display: flex;
+  align-items: center;
+}
+
+.player-container {
+  align-items: end;
+  align-self: center;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.player:nth-child(5) {
+  margin-left: 2rem;
+}
+
+.player img {
+  transform: rotateY(180deg);
+  height: 175px;
+}
+
+.monster-container {
+  justify-content: flex-end;
+  align-items: center;
+  display: flex;
+}
+
+.monster img {
+  height: 500px;
+  margin-bottom: -100px;
+}
+
+.player {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.player-name {
+  text-align: center;
+  margin: -1rem 0 1ex;
+}
+
+.hitpoints {
+  border-radius: 3px;
+  border: 2px solid gainsboro;
+  background: linear-gradient(#333, #111);
+  width: 8rem;
+  margin: 0 auto;
+  display: flex;
+}
+
+.hitpoints-fill {
+  border: 1px solid #333;
+  background: linear-gradient(red, firebrick);
+  height: 8px;
+  margin: 2px;
+  display: block;
+}
+
+.status {
+  padding: 4rem;
+  position: fixed;
+  left: 1ex;
+  right: 1ex;
+  bottom: 0;
+}
+
+.menu {
+  justify-content: center;
+  display: flex;
+}
+
+.menu-action {
+  box-shadow: inset 0 3px 1rem rgba(0,0,0,0.5), inset 0 -3px 1ex rgba(0,0,0,0.5);
+  border: 3px solid gainsboro;
+  border-radius: 100%;
+  background: linear-gradient(#333, #171717), conic-gradient(hotpink 50%, pink 0);
+  color: currentColor;
+  font: inherit;
+  font-size: x-large;
+  width: 15vh;
+  min-height: 100px;
+  height: 15vh;
+  padding: 1rem;
+  position: relative;
+}
+
+.menu-action img {
+  height: 96px;
+}
